@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+.venv/
+# Compilación de las librerías de descifrado
+target/
+Cargo.lock
+bin/
+obj/
+*.class

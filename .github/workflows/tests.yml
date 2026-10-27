@@ -1,0 +1,78 @@
+# Verifica que cada librería de descifrado lea correctamente decrypt/test-vectors.txt.
+name: Pruebas de descifrado
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/python } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r ../../requirements.txt
+      - run: python SecretCryptoTest.py
+
+  javascript:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/javascript } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: node SecretCryptoTest.js
+
+  java:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/java } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - run: javac -d build SecretCrypto.java SecretCryptoTest.java && java -cp build SecretCryptoTest
+
+  csharp:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/csharp/SecretCryptoTest } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "8.0.x" }
+      - run: dotnet run
+
+  go:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/go } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.22", cache-dependency-path: decrypt/go/go.sum }
+      - run: go test ./...
+
+  php:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/php } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: "8.3", extensions: "openssl, sodium" }
+      - run: php SecretCryptoTest.php
+
+  ruby:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/ruby } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { ruby-version: "3.3" }
+      - run: ruby secret_crypto_test.rb
+
+  rust:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: decrypt/rust } }
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo test
